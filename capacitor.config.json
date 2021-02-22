@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "vuex-todo",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}

@@ -1,0 +1,7 @@
+{
+  "name": "vuex-todo",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
