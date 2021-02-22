@@ -3,7 +3,7 @@
     <ion-toolbar>
       <ion-title>New Todo</ion-title>
       <ion-buttons slot="end">
-        <ion-button @click="create()">Create</ion-button>
+        <ion-button @click="save()">Save</ion-button>
         <ion-button @click="close()">Dismiss</ion-button>
       </ion-buttons>
     </ion-toolbar>
@@ -41,16 +41,12 @@ import {
   IonButtons,
   IonButton,
   modalController,
-} from "@ionic/vue";
-import { defineComponent, PropType, onMounted, ref } from "vue";
+} from '@ionic/vue';
+import { defineComponent, PropType, onMounted, ref } from 'vue';
+import { useStore, Todo, MUTATIONS } from '@/store';
 
-interface Todo {
-  title: string;
-  note?: string;
-  id: number;
-}
 export default defineComponent({
-  name: "TodoModal",
+  name: 'TodoModal',
   components: {
     IonContent,
     IonHeader,
@@ -65,23 +61,34 @@ export default defineComponent({
     IonButton,
   },
   props: {
-    todo: Object as PropType<Todo>,
+    todo: {
+      type: Object as PropType<Todo>,
+      default: null,
+    },
   },
   setup(props) {
-    const localTodo = ref<Todo>({ title: "", note: "", id: Math.random() });
+    const store = useStore();
+    const isEdit = ref(false);
+    const localTodo = ref<Todo>({ title: '', note: '', id: Math.random() });
+
     onMounted(() => {
       const { todo } = props;
-      if (todo) localTodo.value = { ...todo };
+      if (Object.entries(todo).length !== 0) {
+        localTodo.value = todo;
+        isEdit.value = true;
+      }
     });
-    const create = () => {
-      console.log(localTodo.value);
+    const close = () => modalController.dismiss();
+    const save = () => {
+      if (isEdit.value) {
+        store.commit(MUTATIONS.EDIT_TODO, localTodo.value);
+      } else {
+        store.commit(MUTATIONS.ADD_TODO, localTodo.value);
+      }
+      close();
     };
 
-    const close = async () => {
-      await modalController.dismiss();
-    };
-
-    return { close, create, localTodo };
+    return { close, save, localTodo };
   },
 });
 </script>

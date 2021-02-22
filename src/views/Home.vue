@@ -7,6 +7,9 @@
           <ion-button @click="openModal()">
             <ion-icon :icon="add" slot="icon-only"></ion-icon>
           </ion-button>
+          <ion-button @click="randomTodo()">
+            <ion-icon :icon="help" slot="icon-only"></ion-icon>
+          </ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
@@ -19,7 +22,7 @@
       </ion-header>
 
       <ion-list ref="listEl">
-        <ion-item-sliding v-for="todo in todos" :key="todo.id">
+        <ion-item-sliding v-for="todo in store.state.todos" :key="todo.id">
           <ion-item @click="openModal(todo)">
             <ion-label>{{ todo.title }}</ion-label>
           </ion-item>
@@ -52,9 +55,10 @@ import {
   IonItemOption,
   IonLabel,
 } from '@ionic/vue';
-import { add, checkmark } from 'ionicons/icons';
-import { defineComponent, ref, toRaw } from 'vue';
+import { add, checkmark, help } from 'ionicons/icons';
+import { defineComponent, ref } from 'vue';
 import Modal from '../components/Modal.vue';
+import { useStore, Todo, MUTATIONS, ACTIONS } from '../store';
 export default defineComponent({
   name: 'Home',
   components: {
@@ -75,31 +79,20 @@ export default defineComponent({
   },
   setup() {
     const listEl = ref();
-    const todos = ref([
-      {
-        title: 'Learn Vue',
-        note: 'https://v3.vuejs.org/guide/introduction.html',
-        id: 0,
-      },
-      {
-        title: 'Learn TypeScript',
-        note: 'https://www.typescriptlang.org',
-        id: 1,
-      },
-      { title: 'Learn Vuex', note: 'https://next.vuex.vuejs.org', id: 2 },
-    ]);
-    const openModal = async (todo = null) => {
+    const store = useStore();
+    const randomTodo = () =>  store.dispatch(ACTIONS.ADD_RND_TODO)
+    const openModal = async (todo: Todo | null = null) => {
       const modal = await modalController.create({
         component: Modal,
-        componentProps: { todo },
+        componentProps: { todo: { ...todo } },
       });
-      await modal.present();
+      return await modal.present();
     };
-    const complete = (todo: any) => {
+    const complete = (todo: Todo) => {
       listEl.value.$el.closeSlidingItems();
-      todos.value = todos.value.filter(t => t.id !== todo.id)
+      store.commit(MUTATIONS.DEL_TODO, todo);
     };
-    return { add, openModal, todos, complete, checkmark, listEl };
+    return { add, openModal, complete, checkmark, listEl, store, help, randomTodo};
   },
 });
 </script>
