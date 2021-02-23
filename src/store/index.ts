@@ -8,16 +8,8 @@ export type State = { todos: Todo[] };
 export const key: InjectionKey<Store<State>> = Symbol();
 const state: State = {
   todos: [
-    {
-      title: 'Learn Vue',
-      note: 'https://v3.vuejs.org/guide/introduction.html',
-      id: 0,
-    },
-    {
-      title: 'Learn TypeScript',
-      note: 'https://www.typescriptlang.org',
-      id: 1,
-    },
+    { title: 'Learn Vue', note: 'https://v3.vuejs.org/guide/introduction.html', id: 0, },
+    { title: 'Learn TypeScript', note: 'https://www.typescriptlang.org', id: 1, },
     { title: 'Learn Vuex', note: 'https://next.vuex.vuejs.org', id: 2 },
   ],
 };
@@ -31,7 +23,7 @@ export const enum MUTATIONS {
   ADD_TODO =  'ADD_TODO',
   DEL_TODO =  'DEL_TODO',
   EDIT_TODO = 'EDIT_TODO'
-};
+}
 const mutations: MutationTree<State> = {
   [MUTATIONS.ADD_TODO](state, newTodo: Todo) {
     state.todos.push({ ...newTodo });
@@ -49,7 +41,7 @@ const mutations: MutationTree<State> = {
  * Perform async tasks, then mutate state
  */
 
-export const enum ACTIONS { ADD_RND_TODO = 'ADD_RND_TODO', };
+export const enum ACTIONS { ADD_RND_TODO = 'ADD_RND_TODO' }
 const actions: ActionTree<State, any> = {
   [ACTIONS.ADD_RND_TODO](store) {
     fetch('https://fakerapi.it/api/v1/texts?_quantity=1')
