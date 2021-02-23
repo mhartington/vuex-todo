@@ -27,10 +27,10 @@ const state: State = {
  * How we mutate our state.
  * Mutations must be synchronous
  */
-export const MUTATIONS = {
-  ADD_TODO: 'ADD_TODO',
-  DEL_TODO: 'DEL_TODO',
-  EDIT_TODO: 'EDIT_TODO'
+export const enum MUTATIONS {
+  ADD_TODO =  'ADD_TODO',
+  DEL_TODO =  'DEL_TODO',
+  EDIT_TODO = 'EDIT_TODO'
 };
 const mutations: MutationTree<State> = {
   [MUTATIONS.ADD_TODO](state, newTodo: Todo) {
@@ -46,9 +46,10 @@ const mutations: MutationTree<State> = {
 
 /*
  * Actions
- * Perform async tasks, the mutate state
+ * Perform async tasks, then mutate state
  */
-export const ACTIONS = { ADD_RND_TODO: 'ADD_RND_TODO', };
+
+export const enum ACTIONS { ADD_RND_TODO = 'ADD_RND_TODO', };
 const actions: ActionTree<State, any> = {
   [ACTIONS.ADD_RND_TODO](store) {
     fetch('https://fakerapi.it/api/v1/texts?_quantity=1')
@@ -66,7 +67,7 @@ const actions: ActionTree<State, any> = {
 
 export const store = createStore<State>({ state, mutations, actions });
 
-// our uwn useStore function for types
+// our own useStore function for types
 export function useStore() {
   return baseUseStore(key);
 }
