@@ -32,7 +32,8 @@ const mutations: MutationTree<State> = {
     state.todos.splice(state.todos.indexOf(todo), 1);
   },
   [MUTATIONS.EDIT_TODO](state, todo: Todo) {
-    state.todos.splice(state.todos.indexOf(todo), 1, todo);
+    const ogIndex = state.todos.findIndex(t => t.id === todo.id)
+    state.todos[ogIndex] = todo;
   },
 };
 
@@ -40,7 +41,6 @@ const mutations: MutationTree<State> = {
  * Actions
  * Perform async tasks, then mutate state
  */
-
 export const enum ACTIONS { ADD_RND_TODO = 'ADD_RND_TODO' }
 const actions: ActionTree<State, any> = {
   [ACTIONS.ADD_RND_TODO](store) {
